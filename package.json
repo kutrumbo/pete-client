@@ -11,6 +11,16 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "eslintConfig": {
+    "extends": "universe/native"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "jsxBracketSameLine": true,
+    "trailingComma": "es5"
+  },
   "dependencies": {
     "@expo/samples": "~3.0.3",
     "@expo/vector-icons": "^10.0.3",
@@ -28,8 +38,15 @@
     "react-navigation": "^3.12.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.4.0",
+    "@typescript-eslint/parser": "^2.4.0",
+    "acorn": "^7.1.0",
     "babel-preset-expo": "^7.0.0",
-    "jest-expo": "^35.0.0"
+    "eslint": "^6.5.1",
+    "eslint-config-universe": "^2.0.0",
+    "jest-expo": "^35.0.0",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.4"
   },
   "private": true
 }

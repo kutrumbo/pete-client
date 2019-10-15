@@ -1,7 +1,20 @@
-const tintColor = '#2f95dc';
+/**
+ * Theme
+ *
+ * blue: #797E8C
+ * tan: #F2CDAE
+ * brown: #725E4D
+ * pink: #F2A387
+ * salmon: #F28E79
+ */
+
+const tintColor = 'rgb(242, 142, 121)'; // #F28E79
+const lightTintColor = 'rgba(242, 142, 121, 0.1)';
 
 export default {
+  background: '#fff',
   tintColor,
+  lightTintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
   tabBar: '#fefefe',

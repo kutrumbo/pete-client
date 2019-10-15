@@ -30,8 +30,7 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
-    Asset.loadAsync([
-    ]),
+    Asset.loadAsync([]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,

@@ -7,6 +7,7 @@ export default {
   window: {
     width,
     height,
+    statusBarHeight: 15,
   },
   isSmallDevice: width < 375,
 };
