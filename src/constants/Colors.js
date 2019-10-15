@@ -10,12 +10,14 @@
 
 const tintColor = 'rgb(242, 142, 121)'; // #F28E79
 const lightTintColor = 'rgba(242, 142, 121, 0.1)';
+const gray = '#ccc';
 
 export default {
   background: '#fff',
   tintColor,
   lightTintColor,
-  tabIconDefault: '#ccc',
+  gray,
+  tabIconDefault: gray,
   tabIconSelected: tintColor,
   tabBar: '#fefefe',
   errorBackground: 'red',

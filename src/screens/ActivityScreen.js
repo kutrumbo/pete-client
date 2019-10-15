@@ -1,47 +1,25 @@
 import React, { useReducer } from 'react';
-import { FlatList, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { map } from 'lodash';
 
+import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
-const INITIAL_DATA = [
-  {
-    id: 'mindfulness',
-    title: 'Mindfulness',
-    active: false,
-  },
-  {
-    id: 'running',
-    title: 'Running',
-    active: false,
-  },
-  {
-    id: 'sport',
-    title: 'Sport',
-    active: false,
-  },
-  {
-    id: 'surfing',
-    title: 'Surfing',
-    active: false,
-  },
-  {
-    id: 'yoga',
-    title: 'Yoga',
-    active: false,
-  },
-];
+import ListSeparator from '../components/ListSeparator';
 
 function Item({ active, dispatch, id, title }) {
+  const iconName = Platform.OS === 'ios' ? 'ios-checkmark' : 'md-checkmark';
+
   return (
-    <TouchableHighlight
-      style={[styles.item, active && styles.activeItem]}
-      onPress={() => dispatch({ id })}
-      underlayColor={Colors.lightTintColor}>
-      <Text style={styles.itemLabel}>{title}</Text>
-    </TouchableHighlight>
+    <TouchableWithoutFeedback onPress={() => dispatch({ id })}>
+      <View style={styles.item}>
+        <Text style={styles.itemLabel}>{title}</Text>
+        {active && <Ionicons name={iconName} size={40} color={Colors.tabIconSelected} />}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -50,7 +28,7 @@ function reducer(state, action) {
 }
 
 export default function ActivityScreen() {
-  const [state, dispatch] = useReducer(reducer, INITIAL_DATA);
+  const [state, dispatch] = useReducer(reducer, Activities);
 
   return (
     <View style={styles.container}>
@@ -58,6 +36,7 @@ export default function ActivityScreen() {
         data={state}
         renderItem={({ item }) => <Item {...item} dispatch={dispatch} />}
         keyExtractor={item => item.id}
+        ItemSeparatorComponent={ListSeparator}
       />
     </View>
   );
@@ -75,12 +54,11 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: Colors.background,
-    padding: 20,
-    paddingVertical: 8,
+    paddingVertical: 16,
     paddingHorizontal: 16,
-  },
-  activeItem: {
-    backgroundColor: Colors.lightTintColor,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   itemLabel: {
     fontSize: 18,
