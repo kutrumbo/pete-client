@@ -24,7 +24,7 @@ function Item({ active, id, title, toggleActivity }) {
     <TouchableWithoutFeedback onPress={() => toggleActivity({ id })}>
       <View style={styles.item}>
         <Text style={styles.itemLabel}>{title}</Text>
-        {active && <Ionicons name={iconName} size={40} color={Colors.tabIconSelected} />}
+        {active && <Ionicons name={iconName} size={48} color={Colors.tabIconSelected} />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: Colors.background,
-    paddingVertical: 16,
     paddingHorizontal: 16,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   itemLabel: {
+    paddingVertical: 16,
     fontSize: 18,
   },
 });
