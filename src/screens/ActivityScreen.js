@@ -19,23 +19,33 @@ const mapState = state => ({
   events: state.events,
 });
 
-function Item({ events, id, title, toggleActivity }) {
-  const iconName = Platform.OS === 'ios' ? 'ios-checkmark' : 'md-checkmark';
+function Item({ events, icon, id, title, toggleActivity }) {
+  const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
   // TODO: take into account date
   const active = find(events, event => event.activityId === id);
 
   return (
     <TouchableWithoutFeedback onPress={() => toggleActivity({ activityId: id })}>
       <View style={styles.item}>
-        <Text style={styles.itemLabel}>{title}</Text>
-        {active && <Ionicons name={iconName} size={48} color={Colors.tabIconSelected} />}
+        <View style={styles.activityLabel}>
+          <Ionicons
+            style={styles.activityIcon}
+            name={`${iconPrefix}-${icon}`}
+            size={48}
+            color={Colors.tabIconSelected}
+          />
+          <Text style={styles.activityTitle}>{title}</Text>
+        </View>
+        {active && (
+          <Ionicons name={`${iconPrefix}-checkmark`} size={48} color={Colors.tabIconSelected} />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const ActivityScreen = ({ events, toggleActivity }) => {
-  const activitiesList = map(Activities, (title, id) => ({ id, title }));
+  const activitiesList = map(Activities, (value, id) => ({ id, ...value }));
   return (
     <View style={styles.container}>
       <FlatList
@@ -66,14 +76,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   item: {
-    backgroundColor: Colors.background,
     paddingHorizontal: 16,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  itemLabel: {
-    paddingVertical: 16,
+  activityLabel: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  activityIcon: {
+    width: 40,
+    textAlign: 'center',
+  },
+  activityTitle: {
+    padding: 16,
     fontSize: 18,
   },
 });
