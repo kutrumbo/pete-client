@@ -1,22 +1,17 @@
-export default [
-  {
-    id: 'mindfulness',
+export default {
+  mindfulness: {
     title: 'Mindfulness',
   },
-  {
-    id: 'running',
+  running: {
     title: 'Running',
   },
-  {
-    id: 'sport',
+  sport: {
     title: 'Sport',
   },
-  {
-    id: 'surfing',
+  surfing: {
     title: 'Surfing',
   },
-  {
-    id: 'yoga',
+  yoga: {
     title: 'Yoga',
   },
-];
+};
