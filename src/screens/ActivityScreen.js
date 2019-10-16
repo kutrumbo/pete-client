@@ -3,25 +3,29 @@ import { connect } from 'react-redux';
 import { FlatList, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { map } from 'lodash';
+import { find, map } from 'lodash';
 
+import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
-import { toggleActivity } from '../redux/ducks/activities';
+import { toggleActivity } from '../redux/ducks/events';
 import ListSeparator from '../components/ListSeparator';
 
 const mapDispatch = { toggleActivity };
 const mapState = state => ({
   // TODO: use selector for performance
-  activities: map(state.activities, (value, id) => ({ id, ...value })),
+  // TODO: think about how to handle date change
+  events: state.events,
 });
 
-function Item({ active, id, title, toggleActivity }) {
+function Item({ events, id, title, toggleActivity }) {
   const iconName = Platform.OS === 'ios' ? 'ios-checkmark' : 'md-checkmark';
+  // TODO: take into account date
+  const active = find(events, event => event.activityId === id);
 
   return (
-    <TouchableWithoutFeedback onPress={() => toggleActivity({ id })}>
+    <TouchableWithoutFeedback onPress={() => toggleActivity({ activityId: id })}>
       <View style={styles.item}>
         <Text style={styles.itemLabel}>{title}</Text>
         {active && <Ionicons name={iconName} size={48} color={Colors.tabIconSelected} />}
@@ -30,12 +34,15 @@ function Item({ active, id, title, toggleActivity }) {
   );
 }
 
-const ActivityScreen = ({ activities, toggleActivity }) => {
+const ActivityScreen = ({ events, toggleActivity }) => {
+  const activitiesList = map(Activities, (title, id) => ({ id, title }));
   return (
     <View style={styles.container}>
       <FlatList
-        data={activities}
-        renderItem={({ item }) => <Item {...item} toggleActivity={toggleActivity} />}
+        data={activitiesList}
+        renderItem={({ item }) => (
+          <Item {...item} events={events} toggleActivity={toggleActivity} />
+        )}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListSeparator}
       />

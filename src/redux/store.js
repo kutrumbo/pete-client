@@ -1,10 +1,10 @@
 import { configureStore } from 'redux-starter-kit';
 
-import activitiesReducer from './ducks/activities';
+import eventsReducer from './ducks/events';
 
 const store = configureStore({
   reducer: {
-    activities: activitiesReducer,
+    events: eventsReducer,
   },
 });
 
