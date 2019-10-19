@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+import { groupBy, map, uniqBy } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
@@ -13,19 +15,25 @@ const mapState = state => ({
 
 const TrendsScreen = ({ events }) => {
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
+  const dates = map(uniqBy(events, event => event.date), event => event.date);
+  const eventsByDate = groupBy(events, event => event.date);
+
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        {events.map(event => (
-          <Ionicons
-            style={styles.activityIcon}
-            key={event.activityId}
-            name={`${iconPrefix}-${Activities[event.activityId].icon}`}
-            size={48}
-            color={Colors.tabIconSelected}
-          />
-        ))}
-      </View>
+      {dates.map(date => (
+        <View key={date} style={styles.row}>
+          <Text>{date}</Text>
+          {eventsByDate[date].map(event => (
+            <Ionicons
+              style={styles.activityIcon}
+              key={event.activityId}
+              name={`${iconPrefix}-${Activities[event.activityId].icon}`}
+              size={48}
+              color={Colors.tabIconSelected}
+            />
+          ))}
+        </View>
+      ))}
     </View>
   );
 };

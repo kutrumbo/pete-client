@@ -8,6 +8,7 @@ import { find, map } from 'lodash';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import { dateString } from '../utils';
 
 import { toggleActivity } from '../redux/ducks/events';
 import ListSeparator from '../components/ListSeparator';
@@ -19,13 +20,12 @@ const mapState = state => ({
   events: state.events,
 });
 
-function Item({ events, icon, id, title, toggleActivity }) {
+function Item({ date, events, icon, id, title, toggleActivity }) {
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
-  // TODO: take into account date
-  const active = find(events, event => event.activityId === id);
+  const active = find(events, event => event.activityId === id && date === event.date);
 
   return (
-    <TouchableWithoutFeedback onPress={() => toggleActivity({ activityId: id })}>
+    <TouchableWithoutFeedback onPress={() => toggleActivity({ activityId: id, date })}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
@@ -46,12 +46,13 @@ function Item({ events, icon, id, title, toggleActivity }) {
 
 const ActivityScreen = ({ events, toggleActivity }) => {
   const activitiesList = map(Activities, (value, id) => ({ id, ...value }));
+
   return (
     <View style={styles.container}>
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
-          <Item {...item} events={events} toggleActivity={toggleActivity} />
+          <Item {...item} date={dateString()} events={events} toggleActivity={toggleActivity} />
         )}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListSeparator}
