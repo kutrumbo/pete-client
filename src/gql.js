@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
 export const INSERT_EVENT = gql`
-  mutation insertEvent($event: events_insert_input!) {
-    insert_events(objects: [$event]) {
+  mutation insertEvent($id: uuid!, $activityId: String!, $date: date!) {
+    insert_events(objects: [{ id: $id, activity_id: $activityId, date: $date }]) {
       returning {
         id
         activity_id

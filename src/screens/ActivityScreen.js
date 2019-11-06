@@ -24,7 +24,7 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, title 
   const handler = () =>
     existingEvent
       ? deleteEvent({ variables: { id: existingEvent.id } })
-      : insertEvent({ variables: { id: uuid(), activity_id: activityId, date } });
+      : insertEvent({ variables: { id: uuid(), activityId, date } });
 
   return (
     <TouchableWithoutFeedback onPress={handler}>
