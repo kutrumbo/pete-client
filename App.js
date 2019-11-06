@@ -2,12 +2,17 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Provider } from 'react-redux';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
 
+import { GRAPHQL_URI } from 'react-native-dotenv';
 import AppNavigator from './src/navigation/AppNavigator';
-import store from './src/redux/store';
+
+const client = new ApolloClient({
+  uri: GRAPHQL_URI,
+});
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -24,9 +29,9 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <Provider store={store}>
+        <ApolloProvider client={client}>
           <AppNavigator />
-        </Provider>
+        </ApolloProvider>
       </View>
     );
   }

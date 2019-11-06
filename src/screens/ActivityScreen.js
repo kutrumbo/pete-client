@@ -1,31 +1,38 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { FlatList, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { find, map } from 'lodash';
+import uuid from 'uuid/v4';
+import { find, map, noop } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { dateString } from '../utils';
+import { camelCaseObject, dateString } from '../utils';
 
-import { toggleActivity } from '../redux/ducks/events';
+import { FETCH_EVENTS, INSERT_EVENT } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
-const mapDispatch = { toggleActivity };
-const mapState = state => ({
-  // TODO: use selector for performance
-  // TODO: think about how to handle date change
-  events: state.events,
-});
-
-function Item({ date, events, icon, id, title, toggleActivity }) {
+function Item({ activityId, date, events, icon, insertEvents, title }) {
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
-  const active = find(events, event => event.activityId === id && date === event.date);
+  const active = find(events, event => event.activityId === activityId && date === event.date);
+  const event = {
+    id: uuid(),
+    activity_id: activityId,
+    date,
+  };
+
+  const selectActivity = () => {
+    insertEvents({
+      variables: {
+        events: [event],
+      },
+    });
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={() => toggleActivity({ activityId: id, date })}>
+    <TouchableWithoutFeedback onPress={() => (active ? noop() : selectActivity())}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
@@ -44,17 +51,29 @@ function Item({ date, events, icon, id, title, toggleActivity }) {
   );
 }
 
-const ActivityScreen = ({ events, toggleActivity }) => {
-  const activitiesList = map(Activities, (value, id) => ({ id, ...value }));
+const ActivityScreen = () => {
+  const { loading, error, data } = useQuery(FETCH_EVENTS);
+  const [insertEvents] = useMutation(INSERT_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
+
+  if (loading && !events) {
+    return <Text>Loading</Text>;
+  }
+
+  const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
+  const activitiesList = map(Activities, (value, id) => ({ activityId: id, ...value }));
 
   return (
     <View style={styles.container}>
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
-          <Item {...item} date={dateString()} events={events} toggleActivity={toggleActivity} />
+          <Item {...item} date={dateString()} events={events} insertEvents={insertEvents} />
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.activityId}
         ItemSeparatorComponent={ListSeparator}
       />
     </View>
@@ -65,10 +84,7 @@ ActivityScreen.navigationOptions = {
   title: 'Activity',
 };
 
-export default connect(
-  mapState,
-  mapDispatch
-)(ActivityScreen);
+export default ActivityScreen;
 
 const styles = StyleSheet.create({
   container: {

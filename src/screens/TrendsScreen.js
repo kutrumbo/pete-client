@@ -1,19 +1,29 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@apollo/react-hooks';
 
 import { groupBy, map, uniqBy } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import { camelCaseObject } from '../utils';
 
-const mapState = state => ({
-  events: state.events,
-});
+import { FETCH_EVENTS } from '../gql';
 
-const TrendsScreen = ({ events }) => {
+const TrendsScreen = () => {
+  const { loading, error, data } = useQuery(FETCH_EVENTS);
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
+
+  if (loading && !events) {
+    return <Text>Loading</Text>;
+  }
+
+  const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
   const dates = map(uniqBy(events, event => event.date), event => event.date);
   const eventsByDate = groupBy(events, event => event.date);
@@ -42,10 +52,7 @@ TrendsScreen.navigationOptions = {
   title: 'Trends',
 };
 
-export default connect(
-  mapState,
-  null
-)(TrendsScreen);
+export default TrendsScreen;
 
 const styles = StyleSheet.create({
   container: {
