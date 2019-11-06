@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import uuid from 'uuid/v4';
-import { find, map } from 'lodash';
+import { find, map, noop } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
@@ -14,7 +14,7 @@ import { camelCaseObject, dateString } from '../utils';
 import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
-function Item({ activityId, date, deleteEvent, events, icon, insertEvent, title }) {
+function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loading, title }) {
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
   const existingEvent = find(
     events,
@@ -27,7 +27,7 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, title 
       : insertEvent({ variables: { id: uuid(), activityId, date } });
 
   return (
-    <TouchableWithoutFeedback onPress={handler}>
+    <TouchableWithoutFeedback onPress={loading ? noop : handler}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
@@ -48,14 +48,18 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, title 
 
 const ActivityScreen = () => {
   const { loading, error, data } = useQuery(FETCH_EVENTS);
-  const [insertEvent] = useMutation(INSERT_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
-  const [deleteEvent] = useMutation(DELETE_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
+  const [insertEvent, insertResult] = useMutation(INSERT_EVENT, {
+    refetchQueries: [{ query: FETCH_EVENTS }],
+  });
+  const [deleteEvent, deleteResult] = useMutation(DELETE_EVENT, {
+    refetchQueries: [{ query: FETCH_EVENTS }],
+  });
 
   if (error) {
     return <Text>Error: {error}</Text>;
   }
 
-  if (loading && !events) {
+  if (loading) {
     return <Text>Loading</Text>;
   }
 
@@ -73,6 +77,7 @@ const ActivityScreen = () => {
             deleteEvent={deleteEvent}
             events={events}
             insertEvent={insertEvent}
+            loading={insertResult.loading || deleteResult.loading}
           />
         )}
         keyExtractor={item => item.activityId}
