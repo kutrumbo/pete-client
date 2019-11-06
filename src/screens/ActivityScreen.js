@@ -4,35 +4,30 @@ import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import uuid from 'uuid/v4';
-import { find, map, noop } from 'lodash';
+import { find, map } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { camelCaseObject, dateString } from '../utils';
 
-import { FETCH_EVENTS, INSERT_EVENT } from '../gql';
+import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
-function Item({ activityId, date, events, icon, insertEvents, title }) {
+function Item({ activityId, date, deleteEvent, events, icon, insertEvent, title }) {
   const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
-  const active = find(events, event => event.activityId === activityId && date === event.date);
-  const event = {
-    id: uuid(),
-    activity_id: activityId,
-    date,
-  };
+  const existingEvent = find(
+    events,
+    event => event.activityId === activityId && date === event.date
+  );
 
-  const selectActivity = () => {
-    insertEvents({
-      variables: {
-        events: [event],
-      },
-    });
-  };
+  const handler = () =>
+    existingEvent
+      ? deleteEvent({ variables: { id: existingEvent.id } })
+      : insertEvent({ variables: { id: uuid(), activity_id: activityId, date } });
 
   return (
-    <TouchableWithoutFeedback onPress={() => (active ? noop() : selectActivity())}>
+    <TouchableWithoutFeedback onPress={handler}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
@@ -43,7 +38,7 @@ function Item({ activityId, date, events, icon, insertEvents, title }) {
           />
           <Text style={styles.activityTitle}>{title}</Text>
         </View>
-        {active && (
+        {existingEvent && (
           <Ionicons name={`${iconPrefix}-checkmark`} size={48} color={Colors.tabIconSelected} />
         )}
       </View>
@@ -53,7 +48,8 @@ function Item({ activityId, date, events, icon, insertEvents, title }) {
 
 const ActivityScreen = () => {
   const { loading, error, data } = useQuery(FETCH_EVENTS);
-  const [insertEvents] = useMutation(INSERT_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
+  const [insertEvent] = useMutation(INSERT_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
+  const [deleteEvent] = useMutation(DELETE_EVENT, { refetchQueries: [{ query: FETCH_EVENTS }] });
 
   if (error) {
     return <Text>Error: {error}</Text>;
@@ -71,7 +67,13 @@ const ActivityScreen = () => {
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
-          <Item {...item} date={dateString()} events={events} insertEvents={insertEvents} />
+          <Item
+            {...item}
+            date={dateString()}
+            deleteEvent={deleteEvent}
+            events={events}
+            insertEvent={insertEvent}
+          />
         )}
         keyExtractor={item => item.activityId}
         ItemSeparatorComponent={ListSeparator}
