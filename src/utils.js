@@ -1,13 +1,28 @@
 import moment from 'moment';
-import { camelCase, isArray, isPlainObject, snakeCase } from 'lodash/fp';
+import { camelCase, isArray, isPlainObject, map, range, snakeCase } from 'lodash/fp';
 
 /**
  * Returns the current date as a String
  *
  * @return {String}
  */
-export function dateString() {
-  return moment().format('YYYY-MM-DD');
+export function dateString(date) {
+  const parsedDate = date ? date : new Date();
+  return moment(parsedDate).format('YYYY-MM-DD');
+}
+
+/**
+ * Returns an array representing a range of days between startDate and today
+ *
+ * @return {Array<Date>}
+ */
+export function dateRangeUntilToday(startDate) {
+  const days = moment().diff(moment(startDate), 'days') + 2;
+  return map(day => {
+    return moment(startDate)
+      .add(day, 'days')
+      .toDate();
+  })(range(1)(days));
 }
 
 /**

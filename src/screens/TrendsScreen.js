@@ -1,14 +1,14 @@
 import React from 'react';
-import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/react-hooks';
 
-import { find, groupBy, map, reverse, sortBy, toPairs } from 'lodash';
+import { find, groupBy, map, minBy, reverse, toPairs } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { camelCaseObject } from '../utils';
+import { camelCaseObject, dateRangeUntilToday, dateString } from '../utils';
 
 import { FETCH_EVENTS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
@@ -26,9 +26,9 @@ function ActivityIcon({ activityIcon }) {
   );
 }
 
-function Item({ date, events }) {
+function Item({ date, eventsByDate }) {
   const activityIcons = map(toPairs(Activities), pair => {
-    const showActivity = find(events, event => event.activityId === pair[0]);
+    const showActivity = find(eventsByDate[date], event => event.activityId === pair[0]);
     return showActivity ? (
       <ActivityIcon key={[pair[0]]} activityIcon={pair[1].icon} />
     ) : (
@@ -52,19 +52,21 @@ const TrendsScreen = () => {
   }
 
   if (loading && !events) {
-    return <Text>Loading</Text>;
+    return <ActivityIndicator size="large" />;
   }
 
   const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
+  const firstDate = minBy(events, event => event.date).date;
+  const dateRange = dateRangeUntilToday(new Date(firstDate));
+  const reversedDates = reverse(map(dateRange, date => dateString(date)));
   const eventsByDate = groupBy(events, event => event.date);
-  const eventPairsSorted = sortBy(toPairs(eventsByDate), pair => pair[0]);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={reverse(eventPairsSorted)}
-        renderItem={({ item }) => <Item date={item[0]} events={item[1]} />}
-        keyExtractor={item => item[0]}
+        data={reversedDates}
+        renderItem={({ item }) => <Item date={item} eventsByDate={eventsByDate} />}
+        keyExtractor={item => item}
         ItemSeparatorComponent={ListSeparator}
       />
     </View>

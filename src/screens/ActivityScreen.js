@@ -1,5 +1,13 @@
 import React from 'react';
-import { FlatList, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
@@ -26,6 +34,7 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loadin
       ? deleteEvent({ variables: { id: existingEvent.id } })
       : insertEvent({ variables: { id: uuid(), activityId, date } });
 
+  // TODO: use the loading check per-activity
   return (
     <TouchableWithoutFeedback onPress={loading ? noop : handler}>
       <View style={styles.item}>
@@ -60,7 +69,7 @@ const ActivityScreen = () => {
   }
 
   if (loading) {
-    return <Text>Loading</Text>;
+    return <ActivityIndicator size="large" />;
   }
 
   const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
