@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -77,6 +78,7 @@ const ActivityScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
