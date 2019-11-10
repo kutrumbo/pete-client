@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -71,7 +63,6 @@ const TrendsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       <FlatList
         data={reversedDates}
         renderItem={({ item }) => <Item date={item} eventsByDate={eventsByDate} />}
@@ -84,6 +75,10 @@ const TrendsScreen = () => {
 
 TrendsScreen.navigationOptions = {
   title: 'Trends',
+  headerTintColor: '#fff',
+  headerStyle: {
+    backgroundColor: Colors.tintColor,
+  },
 };
 
 export default TrendsScreen;

@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -78,7 +77,6 @@ const ActivityScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
@@ -100,6 +98,10 @@ const ActivityScreen = () => {
 
 ActivityScreen.navigationOptions = {
   title: 'Activity',
+  headerTintColor: '#fff',
+  headerStyle: {
+    backgroundColor: Colors.tintColor,
+  },
 };
 
 export default ActivityScreen;
