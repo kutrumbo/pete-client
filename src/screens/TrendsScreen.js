@@ -52,7 +52,11 @@ const TrendsScreen = () => {
   }
 
   if (loading && !events) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
@@ -99,6 +103,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  loadingContainer: {
+    marginTop: 32,
   },
   activityIcon: {
     width: 40,

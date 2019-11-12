@@ -69,7 +69,11 @@ const ActivityScreen = () => {
   }
 
   if (loading) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
@@ -111,6 +115,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Layout.statusBarHeight,
     backgroundColor: Colors.background,
+  },
+  loadingContainer: {
+    marginTop: 32,
   },
   item: {
     paddingHorizontal: 16,
