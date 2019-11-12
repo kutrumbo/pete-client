@@ -17,7 +17,9 @@ export function dateString(date) {
  * @return {Array<Date>}
  */
 export function dateRangeUntilToday(startDate) {
-  const days = moment(new Date()).diff(moment(startDate), 'days') + 1;
+  const currentDate = moment(new Date()).startOf('day');
+  const firstEventDate = moment(startDate).startOf('day');
+  const days = currentDate.diff(firstEventDate, 'days') + 1;
   return map(day => {
     return moment(startDate)
       .add(day, 'days')
