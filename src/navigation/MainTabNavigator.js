@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import TabBarIcon from '../components/TabBarIcon';
 import ActivityScreen from '../screens/ActivityScreen';
 import TrendsScreen from '../screens/TrendsScreen';
+import GoalsScreen from '../screens/GoalsScreen';
 
 const ActivityStack = createStackNavigator(
   {
@@ -38,10 +39,25 @@ const TrendsStack = createStackNavigator(
   }
 );
 
+const GoalsStack = createStackNavigator(
+  {
+    Goals: GoalsScreen,
+  },
+  {
+    navigationOptions: {
+      tabBarLabel: 'Goals',
+      tabBarIcon: ({ focused }) => (
+        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-ribbon' : 'md-ribbon'} />
+      ),
+    },
+  }
+);
+
 const tabNavigator = createBottomTabNavigator(
   {
     ActivityStack,
     TrendsStack,
+    GoalsStack,
   },
   {
     tabBarOptions: {
