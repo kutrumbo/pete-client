@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -7,13 +7,10 @@ import { find, groupBy, map, minBy, reverse, toPairs } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import { camelCaseObject, dateRangeUntilToday, dateString } from '../utils';
+import { camelCaseObject, dateRangeUntilToday, dateString, iconPrefix } from '../utils';
 
 import { FETCH_EVENTS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
-
-const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
 
 function ActivityIcon({ activityIcon }) {
   return (
@@ -89,8 +86,6 @@ export default TrendsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: Layout.statusBarHeight,
     backgroundColor: Colors.background,
   },
   row: {

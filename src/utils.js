@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import moment from 'moment';
 import { camelCase, isArray, isPlainObject, map, range, snakeCase } from 'lodash/fp';
 
@@ -68,3 +69,8 @@ export const camelCaseObject = input => deepMapKeys(input, key => camelCase(key)
  * @return {Object}
  */
 export const snakeCaseObject = input => deepMapKeys(input, key => snakeCase(key));
+
+/**
+ * Returns the platform prefix for an Ionicon icon
+ */
+export const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';

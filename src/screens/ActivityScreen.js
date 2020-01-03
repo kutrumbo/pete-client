@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Platform,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -16,14 +15,12 @@ import { find, map, noop } from 'lodash';
 
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import { camelCaseObject, dateString } from '../utils';
+import { camelCaseObject, dateString, iconPrefix } from '../utils';
 
 import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
 function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loading, title }) {
-  const iconPrefix = Platform.OS === 'ios' ? 'ios' : 'md';
   const existingEvent = find(
     events,
     event => event.activityId === activityId && date === event.date
@@ -112,8 +109,6 @@ export default ActivityScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: Layout.statusBarHeight,
     backgroundColor: Colors.background,
   },
   loadingContainer: {
