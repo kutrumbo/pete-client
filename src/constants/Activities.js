@@ -19,4 +19,8 @@ export default {
     title: 'Yoga',
     icon: 'body',
   },
+  reading: {
+    title: 'Book',
+    icon: 'book',
+  },
 };

@@ -22,6 +22,16 @@ export const FETCH_EVENTS = gql`
   }
 `;
 
+export const FETCH_BOOKS_READ = gql`
+  {
+    events_aggregate(where: { activity_id: { _eq: "reading" } }) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
+
 export const DELETE_EVENT = gql`
   mutation deleteEvent($id: uuid!) {
     delete_events(where: { id: { _eq: $id } }) {

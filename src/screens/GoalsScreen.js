@@ -1,13 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@apollo/react-hooks';
 
 import Colors from '../constants/Colors';
-import { iconPrefix } from '../utils';
+import { camelCaseObject, iconPrefix } from '../utils';
 
+import { FETCH_BOOKS_READ } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
 const GoalsScreen = () => {
+  const { loading, error, data } = useQuery(FETCH_BOOKS_READ);
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const booksRead = camelCaseObject(data).eventsAggregate.aggregate.count;
+
   return (
     <View style={styles.container}>
       <View style={styles.item}>
@@ -20,7 +38,7 @@ const GoalsScreen = () => {
           />
           <Text style={styles.activityTitle}>Books read:</Text>
         </View>
-        <Text style={styles.activityTitle}>0 / 12</Text>
+        <Text style={styles.activityTitle}>{`${booksRead} / 12`}</Text>
       </View>
       <ListSeparator />
       <View style={styles.item}>
@@ -73,5 +91,8 @@ const styles = StyleSheet.create({
   activityTitle: {
     padding: 16,
     fontSize: 18,
+  },
+  loadingContainer: {
+    marginTop: 32,
   },
 });

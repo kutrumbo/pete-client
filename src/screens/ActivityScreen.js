@@ -17,7 +17,7 @@ import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import { camelCaseObject, dateString, iconPrefix } from '../utils';
 
-import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT } from '../gql';
+import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT, FETCH_BOOKS_READ } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
 function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loading, title }) {
@@ -55,10 +55,10 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loadin
 const ActivityScreen = () => {
   const { loading, error, data } = useQuery(FETCH_EVENTS);
   const [insertEvent, insertResult] = useMutation(INSERT_EVENT, {
-    refetchQueries: [{ query: FETCH_EVENTS }],
+    refetchQueries: [{ query: FETCH_EVENTS }, { query: FETCH_BOOKS_READ }],
   });
   const [deleteEvent, deleteResult] = useMutation(DELETE_EVENT, {
-    refetchQueries: [{ query: FETCH_EVENTS }],
+    refetchQueries: [{ query: FETCH_EVENTS }, { query: FETCH_BOOKS_READ }],
   });
 
   if (error) {
