@@ -6,11 +6,11 @@ import { useQuery } from '@apollo/react-hooks';
 import Colors from '../constants/Colors';
 import { camelCaseObject, iconPrefix } from '../utils';
 
-import { FETCH_BOOKS_READ } from '../gql';
+import { FETCH_GOALS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
 const GoalsScreen = () => {
-  const { loading, error, data } = useQuery(FETCH_BOOKS_READ);
+  const { loading, error, data } = useQuery(FETCH_GOALS);
 
   if (error) {
     return <Text>Error: {error}</Text>;
@@ -24,7 +24,9 @@ const GoalsScreen = () => {
     );
   }
 
-  const booksRead = camelCaseObject(data).eventsAggregate.aggregate.count;
+  const booksRead = camelCaseObject(data).booksRead.aggregate.count;
+  // TODO: assumes 2 miles per run
+  const milesRun = camelCaseObject(data).milesRun.aggregate.count * 2;
 
   return (
     <View style={styles.container}>
@@ -51,7 +53,7 @@ const GoalsScreen = () => {
           />
           <Text style={styles.activityTitle}>Miles run:</Text>
         </View>
-        <Text style={styles.activityTitle}>0 / 200</Text>
+        <Text style={styles.activityTitle}>{`${milesRun} / 200`}</Text>
       </View>
     </View>
   );

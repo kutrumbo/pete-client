@@ -22,9 +22,18 @@ export const FETCH_EVENTS = gql`
   }
 `;
 
-export const FETCH_BOOKS_READ = gql`
+export const FETCH_GOALS = gql`
   {
-    events_aggregate(where: { activity_id: { _eq: "reading" } }) {
+    books_read: events_aggregate(
+      where: { activity_id: { _eq: "reading" }, date: { _gte: "2019/01/01" } }
+    ) {
+      aggregate {
+        count
+      }
+    }
+    miles_run: events_aggregate(
+      where: { activity_id: { _eq: "running" }, date: { _gte: "2020/01/01" } }
+    ) {
       aggregate {
         count
       }
