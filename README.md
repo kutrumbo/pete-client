@@ -2,7 +2,7 @@
 
 Built using [Expo](https://expo.io/)
 
-Uses [pete-graphql](https://github.com/kutrumbo/pete-graphql) as the back-end
+Uses [pete-api](https://github.com/kutrumbo/pete-api) as the back-end
 
 ## Getting started
 
