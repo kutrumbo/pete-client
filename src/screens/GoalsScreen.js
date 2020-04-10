@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@apollo/react-hooks';
+import { filter } from 'lodash';
 
+import { fetchEvents } from '../api';
 import Colors from '../constants/Colors';
-import { camelCaseObject, iconPrefix } from '../utils';
+import { iconPrefix } from '../utils';
 
-import { FETCH_GOALS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
-const GoalsScreen = () => {
-  const { loading, error, data } = useQuery(FETCH_GOALS);
+const GoalsScreen = ({ navigation }) => {
+  const [state, setState] = useState([true, false, []]);
+  const [loading, error, events] = state;
+
+  useEffect(() => {
+    navigation.addListener('didFocus', () => {
+      fetchEvents(setState);
+    });
+    fetchEvents(setState);
+  }, [navigation]);
 
   if (error) {
     return <Text>Error: {error}</Text>;
@@ -24,9 +32,9 @@ const GoalsScreen = () => {
     );
   }
 
-  const booksRead = camelCaseObject(data).booksRead.aggregate.count;
+  const booksRead = filter(events, event => event.name === 'reading').length;
   // TODO: assumes 2 miles per run
-  const milesRun = camelCaseObject(data).milesRun.aggregate.count * 2;
+  const milesRun = filter(events, event => event.name === 'running').length * 2;
 
   return (
     <View style={styles.container}>

@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@apollo/react-hooks';
 
 import { find, groupBy, map, minBy, reverse, toPairs } from 'lodash';
 
+import { fetchEvents } from '../api';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
-import { camelCaseObject, dateRangeUntilToday, dateString, iconPrefix } from '../utils';
+import { dateRangeUntilToday, dateString, iconPrefix } from '../utils';
 
-import { FETCH_EVENTS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
 function ActivityIcon({ activityIcon }) {
@@ -25,7 +24,7 @@ function ActivityIcon({ activityIcon }) {
 
 function Item({ date, eventsByDate }) {
   const activityIcons = map(toPairs(Activities), pair => {
-    const showActivity = find(eventsByDate[date], event => event.activityId === pair[0]);
+    const showActivity = find(eventsByDate[date], event => event.name === pair[0]);
     return showActivity ? (
       <ActivityIcon key={[pair[0]]} activityIcon={pair[1].icon} />
     ) : (
@@ -41,14 +40,22 @@ function Item({ date, eventsByDate }) {
   );
 }
 
-const TrendsScreen = () => {
-  const { loading, error, data } = useQuery(FETCH_EVENTS);
+const TrendsScreen = ({ navigation }) => {
+  const [state, setState] = useState([true, false, []]);
+  const [loading, error, events] = state;
+
+  useEffect(() => {
+    navigation.addListener('didFocus', () => {
+      fetchEvents(setState);
+    });
+    fetchEvents(setState);
+  }, [navigation]);
 
   if (error) {
     return <Text>Error: {error}</Text>;
   }
 
-  if (loading && !events) {
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
@@ -56,7 +63,6 @@ const TrendsScreen = () => {
     );
   }
 
-  const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
   const firstDate = minBy(events, event => event.date).date;
   const dateRange = dateRangeUntilToday(new Date(firstDate));
   const reversedDates = reverse(map(dateRange, date => dateString(date)));

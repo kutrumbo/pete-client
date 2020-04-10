@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,32 +8,28 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import uuid from 'uuid/v4';
-import { find, map, noop } from 'lodash';
+import { find, map } from 'lodash';
 
+import { createEvent, deleteEvent, fetchEvents } from '../api';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
-import { camelCaseObject, dateString, iconPrefix } from '../utils';
+import { dateString, iconPrefix } from '../utils';
 
-import { DELETE_EVENT, FETCH_EVENTS, INSERT_EVENT, FETCH_GOALS } from '../gql';
 import ListSeparator from '../components/ListSeparator';
 
-function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loading, title }) {
-  const existingEvent = find(
-    events,
-    event => event.activityId === activityId && date === event.date
-  );
+function Item({ date, events, icon, name, setState, title }) {
+  const existingEvent = find(events, event => event.name === name && date === event.date);
 
   const handler = () =>
     existingEvent
-      ? deleteEvent({ variables: { id: existingEvent.id } })
-      : insertEvent({ variables: { id: uuid(), activityId, date } });
+      ? deleteEvent(existingEvent, events, setState)
+      : createEvent({ id: uuid(), name, date }, events, setState);
 
   // TODO: use the loading check per-activity
   return (
-    <TouchableWithoutFeedback onPress={loading ? noop : handler}>
+    <TouchableWithoutFeedback onPress={handler}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
@@ -53,16 +49,15 @@ function Item({ activityId, date, deleteEvent, events, icon, insertEvent, loadin
 }
 
 const ActivityScreen = () => {
-  const { loading, error, data } = useQuery(FETCH_EVENTS);
-  const [insertEvent, insertResult] = useMutation(INSERT_EVENT, {
-    refetchQueries: [{ query: FETCH_EVENTS }, { query: FETCH_GOALS }],
-  });
-  const [deleteEvent, deleteResult] = useMutation(DELETE_EVENT, {
-    refetchQueries: [{ query: FETCH_EVENTS }, { query: FETCH_GOALS }],
-  });
+  const [state, setState] = useState([true, false, []]);
+  const [loading, error, events] = state;
+
+  useEffect(() => {
+    fetchEvents(setState);
+  }, []);
 
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return <Text>Error: {JSON.stringify(error)}</Text>;
   }
 
   if (loading) {
@@ -73,24 +68,16 @@ const ActivityScreen = () => {
     );
   }
 
-  const events = map(data.events, rawEvent => camelCaseObject(rawEvent));
-  const activitiesList = map(Activities, (value, id) => ({ activityId: id, ...value }));
+  const activitiesList = map(Activities, (value, id) => ({ name: id, ...value }));
 
   return (
     <View style={styles.container}>
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
-          <Item
-            {...item}
-            date={dateString()}
-            deleteEvent={deleteEvent}
-            events={events}
-            insertEvent={insertEvent}
-            loading={insertResult.loading || deleteResult.loading}
-          />
+          <Item {...item} date={dateString()} events={events} setState={setState} />
         )}
-        keyExtractor={item => item.activityId}
+        keyExtractor={item => item.name}
         ItemSeparatorComponent={ListSeparator}
       />
     </View>
