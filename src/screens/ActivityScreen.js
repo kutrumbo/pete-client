@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -12,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import uuid from 'uuid/v4';
 import { find, map } from 'lodash';
 
-import { createEvent, deleteEvent, fetchEvents } from '../api';
+import { createEvent, deleteEvent, fetchEvents, stravaSignIn } from '../api';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import { dateString, iconPrefix } from '../utils';
@@ -80,6 +81,7 @@ const ActivityScreen = () => {
         keyExtractor={item => item.name}
         ItemSeparatorComponent={ListSeparator}
       />
+      <Button title="Give access to Strava" onPress={stravaSignIn} />
     </View>
   );
 };

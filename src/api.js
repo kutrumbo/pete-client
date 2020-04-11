@@ -1,5 +1,6 @@
+import { AuthSession } from 'expo';
 import { concat, without } from 'lodash';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL, STRAVA_CLIENT_ID } from 'react-native-dotenv';
 
 export async function fetchEvents(setState) {
   fetch(`${API_URL}/events`)
@@ -41,4 +42,39 @@ export async function deleteEvent(event, events, setState) {
     .catch(error => {
       setState([false, error, events]);
     });
+}
+
+function stravaTokenExchange(code) {
+  return fetch(`${API_URL}/strava/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code }),
+  });
+}
+
+export async function stravaSignIn() {
+  let redirectUrl = AuthSession.getRedirectUrl();
+  let authResult = await AuthSession.startAsync({
+    authUrl:
+      `https://www.strava.com/oauth/authorize?` +
+      `&client_id=${STRAVA_CLIENT_ID}` +
+      `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
+      `&response_type=code` +
+      `&scope=activity:read_all`,
+  });
+  if (authResult.errorCode) {
+    // TODO: handle error
+    console.log('Auth Error: ' + authResult);
+  } else {
+    const tokenResult = await stravaTokenExchange(authResult.params.code);
+    if (tokenResult.status === 200) {
+      // TODO: store indication of success in local storage
+      console.log('success');
+    } else {
+      // TODO: handle error
+      console.log('token exchange failed');
+    }
+  }
 }
