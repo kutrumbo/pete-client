@@ -2,6 +2,8 @@ import { AuthSession } from 'expo';
 import { concat, without } from 'lodash';
 import { API_URL, STRAVA_CLIENT_ID } from 'react-native-dotenv';
 
+import { setToken } from './storage';
+
 export async function fetchEvents(setState) {
   fetch(`${API_URL}/events`)
     .then(response => response.json())
@@ -71,7 +73,8 @@ export async function stravaSignIn(setLoading, setSignedIn) {
   } else {
     const tokenResult = await stravaTokenExchange(authResult.params.code);
     if (tokenResult.status === 200) {
-      // TODO: store indication of success in local storage
+      const json = await tokenResult.json();
+      setToken(json['athlete_id']); // TODO: change this to an access token
       setSignedIn(true);
     } else {
       setLoading(false);

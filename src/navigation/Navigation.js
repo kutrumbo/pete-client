@@ -1,12 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
 import TabBarIcon from '../components/TabBarIcon';
 import Colors from '../constants/Colors';
 import SignInScreen from '../screens/SignInScreen';
+import { getToken } from '../storage';
 import ActivityStack from './ActivityStack';
 import GoalsStack from './GoalsStack';
 import StackOptions from './StackOptions';
@@ -17,6 +18,15 @@ const Stack = createStackNavigator();
 
 export default function Navigation() {
   const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    const checkToken = async () => {
+      if (await getToken()) {
+        setSignedIn(true);
+      }
+    };
+
+    checkToken();
+  }, []);
 
   return (
     <NavigationContainer>
