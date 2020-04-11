@@ -4,7 +4,7 @@ import { ActivityIndicator, Button, StyleSheet, View } from 'react-native';
 import { stravaSignIn } from '../api';
 import Colors from '../constants/Colors';
 
-export default function SignInScreen({ navigation }) {
+export default function SignInScreen({ route }) {
   const [loading, setLoading] = useState(false);
 
   if (loading) {
@@ -20,7 +20,7 @@ export default function SignInScreen({ navigation }) {
       <Button
         title="Sign in with Strava"
         onPress={() => {
-          stravaSignIn(setLoading);
+          stravaSignIn(setLoading, route.params.setSignedIn);
         }}
       />
     </View>

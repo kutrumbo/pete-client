@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Platform } from 'react-native';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -16,13 +16,13 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default function Navigation() {
-  const signedIn = false;
+  const [signedIn, setSignedIn] = useState(false);
 
   return (
     <NavigationContainer>
       {!signedIn ? (
         <Stack.Navigator screenOptions={StackOptions.screenOptions}>
-          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} initialParams={{ setSignedIn }} />
         </Stack.Navigator>
       ) : (
         <Tab.Navigator

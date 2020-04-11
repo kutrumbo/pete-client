@@ -54,7 +54,7 @@ function stravaTokenExchange(code) {
   });
 }
 
-export async function stravaSignIn(setLoading) {
+export async function stravaSignIn(setLoading, setSignedIn) {
   setLoading(true);
   let redirectUrl = AuthSession.getRedirectUrl();
   let authResult = await AuthSession.startAsync({
@@ -66,17 +66,16 @@ export async function stravaSignIn(setLoading) {
       `&scope=activity:read_all`,
   });
   if (authResult.errorCode) {
-    // TODO: handle error
-    console.log('Auth Error: ' + authResult);
+    setLoading(false);
+    console.error(`Strava Auth Error: ${authResult}`);
   } else {
     const tokenResult = await stravaTokenExchange(authResult.params.code);
     if (tokenResult.status === 200) {
       // TODO: store indication of success in local storage
-      console.log('success');
+      setSignedIn(true);
     } else {
-      // TODO: handle error
-      console.log('token exchange failed');
+      setLoading(false);
+      console.error(`Strava Token Error: ${await tokenResult.json()}`);
     }
   }
-  setLoading(false);
 }
