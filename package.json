@@ -24,7 +24,6 @@
   "dependencies": {
     "@expo/samples": "~3.0.3",
     "@expo/vector-icons": "^10.0.3",
-    "@react-navigation/web": "^1.0.0-alpha.9",
     "@types/react": "^16.9.10",
     "expo": "^35.0.0",
     "expo-asset": "^7.0.0",
@@ -45,7 +44,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
-    "acorn": "^7.1.0",
+    "acorn": "^7.1.1",
     "babel-preset-expo": "^7.0.0",
     "eslint": "^6.5.1",
     "eslint-config-universe": "^2.0.0",
