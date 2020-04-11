@@ -1,15 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { find, groupBy, map, minBy, reverse, toPairs } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
-import { find, groupBy, map, minBy, reverse, toPairs } from 'lodash';
 
 import { fetchEvents } from '../api';
+import ListSeparator from '../components/ListSeparator';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import { dateRangeUntilToday, dateString, iconPrefix } from '../utils';
-
-import ListSeparator from '../components/ListSeparator';
 
 function ActivityIcon({ activityIcon }) {
   return (
@@ -40,7 +38,7 @@ function Item({ date, eventsByDate }) {
   );
 }
 
-const TrendsScreen = ({ navigation }) => {
+export default function TrendsScreen({ navigation }) {
   const [state, setState] = useState([true, false, []]);
   const [loading, error, events] = state;
 
@@ -70,7 +68,7 @@ const TrendsScreen = ({ navigation }) => {
   const eventsByDate = groupBy(events, event => event.date);
 
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
         data={reversedDates}
         renderItem={({ item }) => <Item date={item} eventsByDate={eventsByDate} />}
@@ -79,27 +77,15 @@ const TrendsScreen = ({ navigation }) => {
       />
     </View>
   );
-};
-
-TrendsScreen.navigationOptions = {
-  title: 'Trends',
-  headerTintColor: '#fff',
-  headerStyle: {
-    backgroundColor: Colors.tintColor,
-  },
-};
-
-export default TrendsScreen;
+}
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.background,
-  },
   row: {
     paddingHorizontal: 16,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    backgroundColor: Colors.background,
   },
   activitiesContainer: {
     flex: 1,

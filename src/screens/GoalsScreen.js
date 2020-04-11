@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { filter } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { fetchEvents } from '../api';
+import ListSeparator from '../components/ListSeparator';
 import Colors from '../constants/Colors';
 import { iconPrefix } from '../utils';
 
-import ListSeparator from '../components/ListSeparator';
-
-const GoalsScreen = ({ navigation }) => {
+export default function GoalsScreen({ navigation }) {
   const [state, setState] = useState([true, false, []]);
   const [loading, error, events] = state;
 
@@ -65,17 +64,7 @@ const GoalsScreen = ({ navigation }) => {
       </View>
     </View>
   );
-};
-
-GoalsScreen.navigationOptions = {
-  title: 'Goals',
-  headerTintColor: '#fff',
-  headerStyle: {
-    backgroundColor: Colors.tintColor,
-  },
-};
-
-export default GoalsScreen;
+}
 
 const styles = StyleSheet.create({
   container: {

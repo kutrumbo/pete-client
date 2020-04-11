@@ -11,10 +11,10 @@ Uses [pete-api](https://github.com/kutrumbo/pete-api) as the back-end
 npm install -g expo-cli
 
 # Install packages
-npm install
+yarn
 
 # Start the client
-npm start
+expo start
 ```
 
 You'll need to setup an account on Expo and download the Expo app on your mobile device to test

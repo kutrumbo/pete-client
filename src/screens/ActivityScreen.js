@@ -1,3 +1,5 @@
+import { Ionicons } from '@expo/vector-icons';
+import { find, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,17 +10,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
 import uuid from 'uuid/v4';
-import { find, map } from 'lodash';
 
 import { createEvent, deleteEvent, fetchEvents, stravaSignIn } from '../api';
+import ListSeparator from '../components/ListSeparator';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
 import { dateString, iconPrefix } from '../utils';
-
-import ListSeparator from '../components/ListSeparator';
 
 function Item({ date, events, icon, name, setState, title }) {
   const existingEvent = find(events, event => event.name === name && date === event.date);
@@ -49,7 +47,7 @@ function Item({ date, events, icon, name, setState, title }) {
   );
 }
 
-const ActivityScreen = () => {
+export default function ActivityScreen() {
   const [state, setState] = useState([true, false, []]);
   const [loading, error, events] = state;
 
@@ -72,7 +70,7 @@ const ActivityScreen = () => {
   const activitiesList = map(Activities, (value, id) => ({ name: id, ...value }));
 
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
         data={activitiesList}
         renderItem={({ item }) => (
@@ -84,22 +82,9 @@ const ActivityScreen = () => {
       <Button title="Give access to Strava" onPress={stravaSignIn} />
     </View>
   );
-};
-
-ActivityScreen.navigationOptions = {
-  title: 'Activity',
-  headerTintColor: '#fff',
-  headerStyle: {
-    backgroundColor: Colors.tintColor,
-  },
-};
-
-export default ActivityScreen;
+}
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.background,
-  },
   loadingContainer: {
     marginTop: 32,
   },
@@ -108,6 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: Colors.background,
   },
   activityLabel: {
     flex: 1,
