@@ -45,11 +45,12 @@ const TrendsScreen = ({ navigation }) => {
   const [loading, error, events] = state;
 
   useEffect(() => {
+    // TODO: check that this is best approach
     navigation.addListener('didFocus', () => {
       fetchEvents(setState);
     });
     fetchEvents(setState);
-  }, [navigation]);
+  }, []);
 
   if (error) {
     return <Text>Error: {error}</Text>;
