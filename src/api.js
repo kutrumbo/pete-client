@@ -74,7 +74,7 @@ export async function stravaSignIn(setLoading, setSignedIn) {
     const tokenResult = await stravaTokenExchange(authResult.params.code);
     if (tokenResult.status === 200) {
       const json = await tokenResult.json();
-      setToken(json['athlete_id']); // TODO: change this to an access token
+      setToken(json['access_token']);
       setSignedIn(true);
     } else {
       setLoading(false);
