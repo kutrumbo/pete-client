@@ -3,7 +3,6 @@ import { find, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -12,7 +11,7 @@ import {
 } from 'react-native';
 import uuid from 'uuid/v4';
 
-import { createEvent, deleteEvent, fetchEvents, stravaSignIn } from '../api';
+import { createEvent, deleteEvent, fetchEvents } from '../api';
 import ListSeparator from '../components/ListSeparator';
 import Activities from '../constants/Activities';
 import Colors from '../constants/Colors';
@@ -79,7 +78,6 @@ export default function ActivityScreen() {
         keyExtractor={item => item.name}
         ItemSeparatorComponent={ListSeparator}
       />
-      <Button title="Give access to Strava" onPress={stravaSignIn} />
     </View>
   );
 }

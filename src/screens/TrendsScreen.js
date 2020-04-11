@@ -43,8 +43,8 @@ export default function TrendsScreen({ navigation }) {
   const [loading, error, events] = state;
 
   useEffect(() => {
-    // TODO: check that this is best approach
-    navigation.addListener('didFocus', () => {
+    // TODO: confirm that this is best approach
+    navigation.addListener('focus', () => {
       fetchEvents(setState);
     });
     fetchEvents(setState);

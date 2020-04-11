@@ -13,11 +13,12 @@ export default function GoalsScreen({ navigation }) {
   const [loading, error, events] = state;
 
   useEffect(() => {
-    navigation.addListener('didFocus', () => {
+    // TODO: confirm that this is best approach
+    navigation.addListener('focus', () => {
       fetchEvents(setState);
     });
     fetchEvents(setState);
-  }, [navigation]);
+  }, []);
 
   if (error) {
     return <Text>Error: {error}</Text>;

@@ -54,7 +54,8 @@ function stravaTokenExchange(code) {
   });
 }
 
-export async function stravaSignIn() {
+export async function stravaSignIn(setLoading) {
+  setLoading(true);
   let redirectUrl = AuthSession.getRedirectUrl();
   let authResult = await AuthSession.startAsync({
     authUrl:
@@ -77,4 +78,5 @@ export async function stravaSignIn() {
       console.log('token exchange failed');
     }
   }
+  setLoading(false);
 }
