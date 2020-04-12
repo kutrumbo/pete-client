@@ -62,10 +62,10 @@ export default function TrendsScreen({ navigation }) {
     );
   }
 
-  const firstDate = minBy(events, event => event.date).date;
-  const dateRange = dateRangeUntilToday(new Date(firstDate));
+  const firstEventTime = minBy(events, event => event.time).time;
+  const dateRange = dateRangeUntilToday(new Date(firstEventTime));
   const reversedDates = reverse(map(dateRange, date => dateString(date)));
-  const eventsByDate = groupBy(events, event => event.date);
+  const eventsByDate = groupBy(events, event => dateString(event.time));
 
   return (
     <View>

@@ -18,12 +18,15 @@ import Colors from '../constants/Colors';
 import { dateString, iconPrefix } from '../utils';
 
 function Item({ date, events, icon, name, setState, title }) {
-  const existingEvent = find(events, event => event.name === name && date === event.date);
+  const existingEvent = find(
+    events,
+    event => event.name === name && date === dateString(event.time)
+  );
 
   const handler = () =>
     existingEvent
       ? deleteEvent(existingEvent, events, setState)
-      : createEvent({ id: uuid(), name, date }, events, setState);
+      : createEvent({ id: uuid(), name, time: new Date(), source: 'client' }, events, setState);
 
   // TODO: use the loading check per-activity
   return (

@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
-import moment from 'moment';
 import { camelCase, isArray, isPlainObject, map, range, snakeCase } from 'lodash/fp';
+import moment from 'moment';
+import { Platform } from 'react-native';
 
 /**
  * Returns the current date as a String

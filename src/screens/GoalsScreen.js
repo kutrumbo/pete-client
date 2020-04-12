@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { filter } from 'lodash';
+import { filter, sumBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
@@ -33,8 +33,10 @@ export default function GoalsScreen({ navigation }) {
   }
 
   const booksRead = filter(events, event => event.name === 'reading').length;
-  // TODO: assumes 2 miles per run
-  const milesRun = filter(events, event => event.name === 'running').length * 2;
+  const runsThisYear = filter(events, event => {
+    return event.name === 'running' && new Date(event.time) > new Date('2020-01-01');
+  });
+  const milesRun = Math.round(sumBy(runsThisYear, event => event.details.distance) * 0.000621371);
 
   return (
     <View style={styles.container}>
