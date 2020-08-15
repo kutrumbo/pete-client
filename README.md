@@ -4,6 +4,15 @@ Built using [Expo](https://expo.io/)
 
 Uses [pete-api](https://github.com/kutrumbo/pete-api) as the back-end
 
+## Setting up the environment
+
+Create a `.env` file in the project root with the following structure:
+
+```
+API_URL={{API_URL}}
+STRAVA_CLIENT_ID={{STRAVA_CLIENT_ID}}
+```
+
 ## Getting started
 
 ```
