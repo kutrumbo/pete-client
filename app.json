@@ -3,7 +3,6 @@
     "name": "Pete",
     "slug": "pete",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",
