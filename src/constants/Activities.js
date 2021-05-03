@@ -19,6 +19,10 @@ export default {
     title: 'Yoga',
     icon: 'body',
   },
+  cycling: {
+    title: 'Cycling',
+    icon: 'bicycle',
+  },
   reading: {
     title: 'Book',
     icon: 'book',
