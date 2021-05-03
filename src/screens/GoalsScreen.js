@@ -32,9 +32,11 @@ export default function GoalsScreen({ navigation }) {
     );
   }
 
-  const booksRead = filter(events, event => event.name === 'reading').length;
+  const booksRead = filter(events, event => {
+    return event.name === 'reading' && new Date(event.time) > new Date('2021-01-01');;
+  }).length;
   const runsThisYear = filter(events, event => {
-    return event.name === 'running' && new Date(event.time) > new Date('2020-01-01');
+    return event.name === 'running' && new Date(event.time) > new Date('2021-01-01');
   });
   const milesRun = Math.round(sumBy(runsThisYear, event => event.details.distance) * 0.000621371);
 
