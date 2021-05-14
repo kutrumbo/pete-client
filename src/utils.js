@@ -13,6 +13,24 @@ export function dateString(date) {
 }
 
 /**
+ * Returns the current day of year (1-366)
+ *
+ * @return {Number}
+ */
+export function dayOfYear() {
+  return moment().dayOfYear();
+}
+
+/**
+ * Returns date of the start of year
+ *
+ * @return {Date}
+ */
+export function startOfYear() {
+  return moment().startOf('year');
+}
+
+/**
  * Returns an array representing a range of days between startDate and today
  *
  * @return {Array<Date>}
