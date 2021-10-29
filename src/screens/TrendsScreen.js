@@ -12,7 +12,6 @@ import { dateRangeUntilToday, dateString, iconPrefix } from '../utils';
 function ActivityIcon({ activityIcon }) {
   return (
     <Ionicons
-      style={styles.activityIcon}
       name={`${iconPrefix}-${activityIcon}`}
       size={48}
       color={Colors.tabIconSelected}
@@ -21,14 +20,9 @@ function ActivityIcon({ activityIcon }) {
 }
 
 function Item({ date, eventsByDate }) {
-  const activityIcons = map(toPairs(Activities), pair => {
-    const showActivity = find(eventsByDate[date], event => event.name === pair[0]);
-    return showActivity ? (
-      <ActivityIcon key={[pair[0]]} activityIcon={pair[1].icon} />
-    ) : (
-      <View key={pair[0]} style={styles.activitySpacer} />
-    );
-  });
+  const activityIcons = toPairs(Activities).
+    filter(pair => find(eventsByDate[date], event => event.name === pair[0])).
+    map(pair => <ActivityIcon key={[pair[0]]} activityIcon={pair[1].icon} />);
 
   return (
     <View key={date} style={styles.row}>
@@ -90,17 +84,10 @@ const styles = StyleSheet.create({
   activitiesContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   loadingContainer: {
     marginTop: 32,
-  },
-  activityIcon: {
-    width: 40,
-    textAlign: 'center',
-  },
-  activitySpacer: {
-    width: 40,
   },
   dateLabel: {
     paddingVertical: 16,

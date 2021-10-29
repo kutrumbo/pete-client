@@ -13,7 +13,7 @@ export default {
   },
   surfing: {
     title: 'Surfing',
-    icon: 'analytics',
+    icon: 'water',
   },
   yoga: {
     title: 'Yoga',

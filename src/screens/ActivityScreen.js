@@ -34,7 +34,6 @@ function Item({ date, events, icon, name, setState, title }) {
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
-            style={styles.activityIcon}
             name={`${iconPrefix}-${icon}`}
             size={48}
             color={Colors.tabIconSelected}
@@ -99,10 +98,6 @@ const styles = StyleSheet.create({
   activityLabel: {
     flex: 1,
     flexDirection: 'row',
-  },
-  activityIcon: {
-    width: 40,
-    textAlign: 'center',
   },
   activityTitle: {
     padding: 16,

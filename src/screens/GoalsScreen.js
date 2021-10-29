@@ -57,7 +57,6 @@ export default function GoalsScreen({ navigation }) {
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
-            style={styles.activityIcon}
             name={`${iconPrefix}-${Activities.reading.icon}`}
             size={48}
             color={Colors.tabIconSelected}
@@ -71,7 +70,6 @@ export default function GoalsScreen({ navigation }) {
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
-            style={styles.activityIcon}
             name={`${iconPrefix}-${Activities.running.icon}`}
             size={48}
             color={Colors.tabIconSelected}
@@ -85,7 +83,6 @@ export default function GoalsScreen({ navigation }) {
       <View style={styles.item}>
         <View style={styles.activityLabel}>
           <Ionicons
-            style={styles.activityIcon}
             name={`${iconPrefix}-${Activities.cycling.icon}`}
             size={48}
             color={Colors.tabIconSelected}
@@ -115,10 +112,6 @@ const styles = StyleSheet.create({
   activityLabel: {
     flex: 1,
     flexDirection: 'row',
-  },
-  activityIcon: {
-    width: 40,
-    textAlign: 'center',
   },
   activityTitle: {
     padding: 16,
