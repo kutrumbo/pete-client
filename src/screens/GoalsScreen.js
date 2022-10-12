@@ -5,8 +5,8 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { fetchEvents } from '../api';
 import ListSeparator from '../components/ListSeparator';
-import Colors from '../constants/Colors';
 import Activities from '../constants/Activities';
+import Colors from '../constants/Colors';
 import { dayOfYear, iconPrefix, startOfYear } from '../utils';
 
 export default function GoalsScreen({ navigation }) {
@@ -43,13 +43,17 @@ export default function GoalsScreen({ navigation }) {
   const runsThisYear = filter(events, event => {
     return event.name === 'running' && new Date(event.time) > beginningOfYear;
   });
-  const milesRun = Math.round(sumBy(runsThisYear, event => event.details.distance) * milesMultiplier);
+  const milesRun = Math.round(
+    sumBy(runsThisYear, event => event.details.distance) * milesMultiplier
+  );
   const projectedMilesRun = Math.round(milesRun / (dayOfYear() / 365));
 
   const cyclesThisYear = filter(events, event => {
     return event.name === 'cycling' && new Date(event.time) > beginningOfYear;
   });
-  const milesCycled = Math.round(sumBy(cyclesThisYear, event => event.details.distance) * milesMultiplier);
+  const milesCycled = Math.round(
+    sumBy(cyclesThisYear, event => event.details.distance) * milesMultiplier
+  );
   const projectedMilesCycled = Math.round(milesCycled / (dayOfYear() / 365));
 
   return (
@@ -90,7 +94,7 @@ export default function GoalsScreen({ navigation }) {
           <Text style={styles.activityTitle}>Miles cycled:</Text>
         </View>
         <Text style={styles.activitySubText}>{`(${projectedMilesCycled})`}</Text>
-        <Text style={styles.activityTitle}>{`${milesCycled} / 100`}</Text>
+        <Text style={styles.activityTitle}>{`${milesCycled} / 200`}</Text>
       </View>
     </View>
   );
