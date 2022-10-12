@@ -33,11 +33,7 @@ function Item({ date, events, icon, name, setState, title }) {
     <TouchableWithoutFeedback onPress={handler}>
       <View style={styles.item}>
         <View style={styles.activityLabel}>
-          <Ionicons
-            name={`${iconPrefix}-${icon}`}
-            size={48}
-            color={Colors.tabIconSelected}
-          />
+          <Ionicons name={`${iconPrefix}-${icon}`} size={48} color={Colors.tabIconSelected} />
           <Text style={styles.activityTitle}>{title}</Text>
         </View>
         {existingEvent && (
