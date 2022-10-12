@@ -27,4 +27,8 @@ export default {
     title: 'Book',
     icon: 'book',
   },
+  swim: {
+    title: 'Swim',
+    icon: 'help-buoy',
+  },
 };
