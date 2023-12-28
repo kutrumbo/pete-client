@@ -3,6 +3,7 @@
     "name": "Pete",
     "slug": "pete",
     "privacy": "public",
+    "scheme": "peteapp",
     "platforms": [
       "ios",
       "android",
@@ -17,15 +18,26 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/555e6fae-3fe6-418e-bc62-ede8202b9724"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "me.kutrumbos"
     },
     "description": "",
-    "githubUrl": "https://github.com/kutrumbo/pete-client"
+    "githubUrl": "https://github.com/kutrumbo/pete-client",
+    "extra": {
+      "eas": {
+        "projectId": "555e6fae-3fe6-418e-bc62-ede8202b9724"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "android": {}
   }
 }

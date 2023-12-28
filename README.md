@@ -16,14 +16,11 @@ STRAVA_CLIENT_ID={{STRAVA_CLIENT_ID}}
 ## Getting started
 
 ```
-# Download the Expo command line tools
-npm install -g expo-cli
-
 # Install packages
 yarn
 
 # Start the client
-expo start
+yarn start
 ```
 
 You'll need to setup an account on Expo and download the Expo app on your mobile device to test
